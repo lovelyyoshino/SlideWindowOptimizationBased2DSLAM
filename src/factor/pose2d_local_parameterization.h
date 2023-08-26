@@ -7,19 +7,19 @@
 
 class Pose2DLocalParameterization : public ceres::LocalParameterization
 {
-    virtual bool Plus(const double* x, const double* delta,double* x_plus_delta) const
+    virtual bool Plus(const double *x, const double *delta, double *x_plus_delta) const
     {
         x_plus_delta[0] = x[0] + delta[0];
         x_plus_delta[1] = x[1] + delta[1];
-        x_plus_delta[2] = Utility::normalizeAngle(x[2] + delta[2]);     
-        return true;   
+        x_plus_delta[2] = Utility::normalizeAngle(x[2] + delta[2]); // 角度归一化到[-pi,pi]
+        return true;
     }
-    virtual bool ComputeJacobian(const double* x, double* jacobian) const
+    virtual bool ComputeJacobian(const double *x, double *jacobian) const // 计算雅克比矩阵
     {
         Eigen::Map<Eigen::Matrix3d> j(jacobian);
         j.setIdentity();
         return true;
     }
-    virtual int GlobalSize() const {return 3; }
-    virtual int LocalSize() const {return 3; }
+    virtual int GlobalSize() const { return 3; }
+    virtual int LocalSize() const { return 3; }
 };
